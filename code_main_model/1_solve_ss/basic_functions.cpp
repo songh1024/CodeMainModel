@@ -122,7 +122,7 @@ int sear2(int length, double* a, double value)
 				return i;
 	}
 
-	//return 99999;
+	return 99999;
 
 }
 

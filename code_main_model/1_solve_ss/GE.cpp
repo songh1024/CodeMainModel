@@ -40,35 +40,32 @@ void GE(double* Pi, double* Z, double* psi, double* zeta, double* w_final, doubl
 
 	// General Eq
 	int temp=0;
-	for (int i_r=0; i_r<maxit_bisec_ss_r; ++i_r)
-	{
-		i_r_last=i_r;
-		r=r_iterate[i_r];
-		temp=(i_r<maxit_bisec_ss_r-1)?maxit_bisec_ss_w_mid:maxit_bisec_ss_w;
-		for (int i_mkt = 0; i_mkt < nmkt; ++i_mkt)
-		{
+	for (int i_r = 0; i_r < maxit_bisec_ss_r; ++i_r) {
+		i_r_last = i_r;
+		r = r_iterate[i_r];
+		temp = (i_r < maxit_bisec_ss_r - 1) ? maxit_bisec_ss_w_mid : maxit_bisec_ss_w;
+		for (int i_mkt = 0; i_mkt < nmkt; ++i_mkt) {
 			wlow[i_mkt]=minw;
 			whigh[i_mkt]=maxw;
 		}
 
-		for (int i_w=0; i_w<temp; ++i_w)	//for (i_w=0; i_w<1; ++i_w)
-		{
-			filename=currentpath+("progress.txt");	write_progress(filename,i_r,i_w);
-			i_w_last=i_w;
+		for (int i_w = 0; i_w < temp; ++i_w) {	//for (i_w=0; i_w<1; ++i_w)
+			filename = currentpath + ("progress.txt");
+            write_progress(filename, i_r, i_w);
+			i_w_last = i_w;
 			for (int i_mkt = 0; i_mkt < nmkt; ++i_mkt)
-				w[i_mkt]=w_iterate[i_r][i_w][i_mkt];
+				w[i_mkt] = w_iterate[i_r][i_w][i_mkt];
 
-			for (int i_mkt = 0; i_mkt < nmkt; ++i_mkt)
-				optimal_decision(Z[i_mkt],
-						adjust_ad[i_mkt], wealth_ad[i_mkt], gk_ad[i_mkt], gl_ad[i_mkt],
-									adjust_noad[i_mkt], wealth_noad[i_mkt], gk_noad[i_mkt], gl_noad[i_mkt],
-									gridb, gridtheta, gridz, probz, trans_z, w[i_mkt], r, psi[i_mkt], zeta[i_mkt]);
+			for (int i_mkt = 0; i_mkt < nmkt; ++i_mkt) {
+                optimal_decision(Z[i_mkt],
+                                 adjust_ad[i_mkt], wealth_ad[i_mkt], gk_ad[i_mkt], gl_ad[i_mkt],
+                                 adjust_noad[i_mkt], wealth_noad[i_mkt], gk_noad[i_mkt], gl_noad[i_mkt],
+                                 gridb, gridtheta, gridz, probz, trans_z, w[i_mkt], r, psi[i_mkt], zeta[i_mkt]);
+            }
 
 			int it=0;
-			for(it=1; it<maxit_DP; ++it)
-			{
-				for (int i_mkt = 0; i_mkt < nmkt; ++i_mkt)
-				{
+			for(it=1; it<maxit_DP; ++it) {
+				for (int i_mkt = 0; i_mkt < nmkt; ++i_mkt) {
 					diff[it][i_mkt]=itvfun_V(it, i_mkt, 
 						theta_candidate, 
 						V_ad[i_mkt], gc_ad[i_mkt], gtheta_ad[i_mkt], gb_ad[i_mkt], gk_ad[i_mkt], gl_ad[i_mkt], adjust_ad[i_mkt], wealth_ad[i_mkt],

@@ -14,9 +14,11 @@ int main()
 	GetCurrentDir(cCurrentPath, sizeof(cCurrentPath));
 	std::string currentpath = std::string(cCurrentPath);
 	std::string inputpath = std::string(cCurrentPath);
-	currentpath = currentpath.append("/computation_results/"); //linux
-	inputpath = inputpath.append("/input/"); //linux
+	currentpath = currentpath.append("\\..\\computation_results\\"); //linux
+	inputpath = inputpath.append("\\..\\input\\"); //linux
 	std::string filename;
+    std::cout << "currentpath: " << currentpath << std::endl;
+    std::cout << "inputpath: " << inputpath << std::endl;
 
 	// Initialize markets
 	double* Pi = ini_matrix1(nmkt);	
@@ -32,8 +34,7 @@ int main()
 
 	double* zeta=ini_matrix1(nmkt);	
 	double* psi=ini_matrix1(nmkt);
-	for (int i_mkt = 0; i_mkt < nmkt; ++i_mkt)
-	{
+	for (int i_mkt = 0; i_mkt < nmkt; ++i_mkt) {
 		psi[i_mkt] = conspsi + d[i_mkt] * thetapsi;
 		zeta[i_mkt] = conszeta + d[i_mkt] * thetazeta;
 		Pi[i_mkt] = Pi[i_mkt] / Pi_sum;
@@ -60,13 +61,23 @@ int main()
 	linspace(theta_candidate, mintheta, maxtheta, coefficient);
 
 	// simulation
-	int*** b_AtoB_M_index = ini_int_matrix3(nz, nb_pdf, ntheta_pdf);
-	int*** theta_AtoB_M_index=ini_int_matrix3(nz, nb_pdf, ntheta_pdf);
-	double***** V_AtoB=ini_matrix5(nmkt, nz, nb_pdf, ntheta_pdf, nmkt);
-	double***** step_AtoB_prob=ini_matrix5(nmkt, nz, nb_pdf, ntheta_pdf, nmkt);
-	int**** b_BtoA_next_index=ini_int_matrix4(nmkt, nz, nb_pdf, ntheta_pdf);
-	int**** theta_BtoA_next_index=ini_int_matrix4(nmkt, nz, nb_pdf, ntheta_pdf);
-	double** diff=ini_matrix2(maxit_DP, nmkt);
+    // 不申请内存，因为需要的内存空间太大
+//	int*** b_AtoB_M_index = ini_int_matrix3(nz, nb_pdf, ntheta_pdf);
+//	int*** theta_AtoB_M_index=ini_int_matrix3(nz, nb_pdf, ntheta_pdf);
+//	double***** V_AtoB=ini_matrix5(nmkt, nz, nb_pdf, ntheta_pdf, nmkt);
+//	double***** step_AtoB_prob=ini_matrix5(nmkt, nz, nb_pdf, ntheta_pdf, nmkt);
+//	int**** b_BtoA_next_index=ini_int_matrix4(nmkt, nz, nb_pdf, ntheta_pdf);
+//	int**** theta_BtoA_next_index=ini_int_matrix4(nmkt, nz, nb_pdf, ntheta_pdf);
+
+    // 只是定义变量，并没有实际申请内存，以免后面的代码出错
+    int*** b_AtoB_M_index;
+    int*** theta_AtoB_M_index;
+    double***** V_AtoB;
+    double***** step_AtoB_prob;
+    int**** b_BtoA_next_index;
+    int**** theta_BtoA_next_index;
+
+    double** diff = ini_matrix2(maxit_DP, nmkt);
 
 	// demand_supply
 	double*** temp_fin = ini_matrix3(nz, nb, ntheta);
@@ -78,8 +89,18 @@ int main()
 	double* probz = ini_matrix1(nz);
 	double** trans_z = ini_matrix2(nz,nz);
 	z_generator(gridz, probz, trans_z);
-	//for (int i = 0; i < nz; ++i)
-		//cout << i << "    " << gridz[i] << "    " << probz[i] << endl;
+
+    // 打印 gridz probz的值
+	std::cout << "i    gridz    probz" << std::endl;
+    for (int i = 0; i < nz; ++i)
+		std::cout << i << "    " << gridz[i] << "    " << probz[i] << std::endl;
+    std::cout << "trans_z" << std::endl;
+    for (int i = 0; i < nz; i++) {
+        for (int j = 0; j < nz; j++) {
+            std::cout << trans_z[i][j] << " ";
+        }
+        std::cout << std::endl;
+    }
 
 	double* gridb=ini_matrix1(nb);
 	linspace(gridb,minb,maxb,nb);
@@ -119,9 +140,13 @@ int main()
 	double* gridtheta_pdf=ini_matrix1(ntheta_pdf);
 	linspace(gridtheta_pdf,mintheta,maxtheta,ntheta_pdf);
 
-	double***** mig= ini_matrix5(period, nmkt, nz, nb_pdf, ntheta_pdf);
-	double***** pdf_A=ini_matrix5(period, nmkt, nz, nb_pdf, ntheta_pdf);
-	double***** pdf_B=ini_matrix5(period, nmkt, nz, nb_pdf, ntheta_pdf);
+    // 暂时不申请空间mig,pdf_A,pdf_B
+    double***** mig;
+    double***** pdf_A;
+    double***** pdf_B;
+//	double***** mig= ini_matrix5(period, nmkt, nz, nb_pdf, ntheta_pdf);
+//	double***** pdf_A=ini_matrix5(period, nmkt, nz, nb_pdf, ntheta_pdf);
+//	double***** pdf_B=ini_matrix5(period, nmkt, nz, nb_pdf, ntheta_pdf);
 	double** sum_pdf_B=ini_matrix2(period, nmkt);
 	double** error_pdf_B=ini_matrix2(period, nmkt);
 	

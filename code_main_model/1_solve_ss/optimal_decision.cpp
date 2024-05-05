@@ -1,11 +1,11 @@
 #include "parameters.h" 
 using namespace std;
+
 void optimal_decision(double p, 
 	double*** adjust_ad, double*** wealth_ad, double*** gk_ad, double*** gl_ad,
 	double*** adjust_noad, double*** wealth_noad, double*** gk_noad, double*** gl_noad,
 	double* gridb, double* gridtheta, double* gridz, double* probz, double** trans_z,
-	double w, double r, double psi, double zeta)
-{
+	double w, double r, double psi, double zeta) {
 	double borrowing_multiplier = 1 / ksi;
 	double b = 0.0;
 	double theta = 0.0;
@@ -27,8 +27,7 @@ void optimal_decision(double p,
 
 	double k_coefficient = pow(((1 - alpha) / w), ((1 - alpha) * (1 - nu) / nu)) * pow((1 - nu), (1 / nu));
 	double l_coefficient = pow((w / ((1 - nu) * (1 - alpha))), (1 / (alpha * nu - nu - alpha)));
-	for (int i_z = 0; i_z < nz; ++i_z)
-	{
+	for (int i_z = 0; i_z < nz; ++i_z) {
 		gk_unconstrained_nobo_ad[i_z] = k_coefficient * pow(((delta) / alpha), ((alpha * nu - nu - alpha) / nu)) * pow(p * gridz[i_z], (1 / nu));
 		gk_unconstrained_bo_ad[i_z] = k_coefficient * pow(((delta + r + chi) / alpha), ((alpha * nu - nu - alpha) / nu)) * pow(p * gridz[i_z], (1 / nu));
 		gk_unconstrained_nobo_noad[i_z] = gk_unconstrained_nobo_ad[i_z];
@@ -46,15 +45,13 @@ void optimal_decision(double p,
 	double optimal_l_bo_noad = 0.0;
 
 	for (int i_b = 0; i_b < nb; ++i_b)
-		for (int i_theta = 0; i_theta < ntheta; ++i_theta)
-		{
+		for (int i_theta = 0; i_theta < ntheta; ++i_theta) {
 			b = gridb[i_b];
 			theta = gridtheta[i_theta];
 			m = b * theta;
 			a = b * (1 - theta);
 			total_wealth_w_ad = m + a * (1 + r) + w - zeta;
-			for (int i_z = 0; i_z < nz; ++i_z)
-			{
+			for (int i_z = 0; i_z < nz; ++i_z) {
 				//if ((i_b == 0 && i_z == 0 && i_theta == 0))
 					//cout << endl;
 				z = gridz[i_z];

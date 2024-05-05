@@ -56,10 +56,9 @@ double itvfun_V(int it, int i_mkt,
 
 
 void golden_section_search_ad(int it, int i_mkt, int state_z, int state_b, int state_theta, double* theta_candidate, double*** V, double*** gc, double*** gtheta, double*** gb, double**** V_prv, double*** wealth,
-	double* gridb, double* gridtheta, double* gridz, double* probz, double** trans_z)
-{
-	double total_wealth=wealth[state_z][state_b][state_theta];
+	double* gridb, double* gridtheta, double* gridz, double* probz, double** trans_z) {
 
+    double total_wealth=wealth[state_z][state_b][state_theta];
 	double consumption=0.0;
 	double clow=0.0;
 	double chigh=total_wealth;
@@ -81,42 +80,38 @@ void golden_section_search_ad(int it, int i_mkt, int state_z, int state_b, int s
 	double c_opt=0.0;
 	double theta_opt=0.0;
 
-	for (int index=0; index<coefficient; ++index) 
-	{
-		theta=theta_candidate[index];
-		clow=0.0;
-		chigh=total_wealth;
-		itc=0;
-		diffc=chigh-clow;
-		flag_c=0;
-		temp_clow=clow+(1-golden_ratio)*diffc;
-	    temp_chigh=chigh-(1-golden_ratio)*diffc;
-		while (itc<maxit_gss && diffc>=tol_gss)
-		{
+    // 遍历coefficient，对于每个index，求theta及对应的v_opt, v_low, c_low
+    // 找到最小的v_opt
+	for (int index=0; index < coefficient; ++index) {
+		theta = theta_candidate[index];
+		clow = 0.0;
+		chigh = total_wealth;
+		itc = 0;
+		diffc = chigh - clow;
+		flag_c = 0;
+		temp_clow = clow + (1 - golden_ratio) * diffc;
+	    temp_chigh = chigh - (1 - golden_ratio) * diffc;
+
+		while (itc < maxit_gss && diffc >= tol_gss) {
 			++itc;
-			if (flag_c!=2)
-			{
-				consumption=temp_clow;
-				v_clow=value_ad(i_mkt, state_b, state_z, total_wealth, consumption, theta, V_prv, gridb, gridtheta, trans_z);
+			if (flag_c!=2) {
+				consumption = temp_clow;
+				v_clow = value_ad(i_mkt, state_b, state_z, total_wealth, consumption, theta, V_prv, gridb, gridtheta, trans_z);
 			}
 
-			if (flag_c!=1)
-			{
-				consumption=temp_chigh;
-				v_chigh=value_ad(i_mkt, state_b, state_z, total_wealth, consumption, theta, V_prv, gridb, gridtheta, trans_z);
+			if (flag_c!=1) {
+				consumption = temp_chigh;
+				v_chigh = value_ad(i_mkt, state_b, state_z, total_wealth, consumption, theta, V_prv, gridb, gridtheta, trans_z);
 			}
 
-			if (v_clow>v_chigh)
-			{
+			if (v_clow > v_chigh) {
 				flag_c=1;
 				chigh=temp_chigh;
 				temp_chigh=temp_clow;
 				v_chigh=v_clow;
 				temp_clow=clow+(1-golden_ratio)*(chigh-clow);
 				diffc=temp_chigh-temp_clow;
-			}
-			else
-			{
+			} else {
 				flag_c=2;
 				clow=temp_clow;
 				temp_clow=temp_chigh;
@@ -124,16 +119,13 @@ void golden_section_search_ad(int it, int i_mkt, int state_z, int state_b, int s
 				temp_chigh=chigh-(1-golden_ratio)*(chigh-clow);
 				diffc=temp_chigh-temp_clow;
 			}
-			
-
 		}
-		if (v_clow>v_opt)
-		{
+
+        if (v_clow>v_opt) {
 			v_opt=v_clow; // The final v_clow is not necessary the value evaluated at clow, could be chigh
 			c_opt=clow;
 			theta_opt=theta;
 		}
-
 	}
 
 	//store optimal policies and values
@@ -141,8 +133,6 @@ void golden_section_search_ad(int it, int i_mkt, int state_z, int state_b, int s
 	gc[state_z][state_b][state_theta] = c_opt;
 	gtheta[state_z][state_b][state_theta] = theta_opt;
 	gb[state_z][state_b][state_theta] = total_wealth - c_opt;
-	
-
 }
 
 void golden_section_search_noad(int it, int i_mkt, int state_z, int state_b, int state_theta, double*** V, double*** gc, double*** gtheta, double*** gb, double**** V_prv, double*** wealth,

@@ -43,7 +43,7 @@ const double maxb = 200.0;
 const double mintheta = 0.0;
 const double maxtheta = 1.0;
 
-const int maxit_DP = 100;
+const int maxit_DP = 10;  // 由100修改成10
 const int maxit_gss = 200;
 const double tol_itvfun = 1e-4;
 const double tol_gss = 1e-4;
@@ -53,7 +53,7 @@ const int coefficient = ntheta;
 
 const int writing_precision = 6;
 
-const int nb_pdf = 10001;
+const int nb_pdf = 11;  // change 10001 to 11
 const int ntheta_pdf = 11;
 
 const double initial_saving = 2.0;
