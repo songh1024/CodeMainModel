@@ -1,0 +1,1 @@
+g++ -o main.o basic_functions.cpp demand_supply.cpp GE.cpp ini_matrix.cpp linear_interpolation.cpp linspace.cpp  main.cpp optimal_decision.cpp read_dat.cpp simulation.cpp vfun_it.cpp z_gen.cpp parameters.h function_declaration.h -fPIC -fopenmp -O2
