@@ -9,17 +9,14 @@ double itvfun_V(int it, int i_mkt,
 {
 	#pragma omp parallel for schedule(dynamic, 1)
 	for (int i_b=0; i_b<nb; ++i_b)
-		for (int i_z=0; i_z<nz; ++i_z)
-		{
-			for (int i_theta=0; i_theta<ntheta; ++i_theta)
-			{
+		for (int i_z=0; i_z<nz; ++i_z) {
+			for (int i_theta=0; i_theta<ntheta; ++i_theta) {
 				//if ((it == 1 && i_b == 0 && i_z == 0 && i_theta == 0))
 					//cout << endl;
 				golden_section_search_ad(it, i_mkt, i_z, i_b, i_theta, theta_candidate, V_ad, gc_ad, gtheta_ad, gb_ad, V_prv, wealth_ad, gridb, gridtheta, gridz, probz, trans_z);
 				golden_section_search_noad(it, i_mkt, i_z, i_b, i_theta, V_noad, gc_noad, gtheta_noad, gb_noad, V_prv, wealth_noad, gridb, gridtheta, gridz, probz, trans_z, r);
 				
-				if (V_ad[i_z][i_b][i_theta] >= V_noad[i_z][i_b][i_theta])
-				{
+				if (V_ad[i_z][i_b][i_theta] >= V_noad[i_z][i_b][i_theta]) {
 					V_next[i_z][i_b][i_theta] = V_ad[i_z][i_b][i_theta];
 					gc[i_z][i_b][i_theta] = gc_ad[i_z][i_b][i_theta];
 					gtheta[i_z][i_b][i_theta] = gtheta_ad[i_z][i_b][i_theta];
@@ -28,9 +25,7 @@ double itvfun_V(int it, int i_mkt,
 					gl[i_z][i_b][i_theta] = gl_ad[i_z][i_b][i_theta];
 					wealth[i_z][i_b][i_theta] = wealth_ad[i_z][i_b][i_theta];
 					adjust[i_z][i_b][i_theta] = (2*adjust_ad[i_z][i_b][i_theta]);
-				}
-				else
-				{
+				} else {
 					V_next[i_z][i_b][i_theta]=V_noad[i_z][i_b][i_theta];
 					gc[i_z][i_b][i_theta]=gc_noad[i_z][i_b][i_theta];
 					gtheta[i_z][i_b][i_theta]=gtheta_noad[i_z][i_b][i_theta];

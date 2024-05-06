@@ -34,7 +34,7 @@ const double thetazeta = 0.0015;
 const double kappa = 1e10;
 const double eta = 0.0;
 
-const int nb = 201;
+const int nb = 21;  // 201改成21
 const int ntheta = 6;
 const int nz = 7;
 
@@ -43,7 +43,7 @@ const double maxb = 200.0;
 const double mintheta = 0.0;
 const double maxtheta = 1.0;
 
-const int maxit_DP = 10;  // 由100修改成10
+const int maxit_DP = 50;  // 由100修改成10
 const int maxit_gss = 200;
 const double tol_itvfun = 1e-4;
 const double tol_gss = 1e-4;
@@ -57,18 +57,18 @@ const int nb_pdf = 11;  // change 10001 to 11
 const int ntheta_pdf = 11;
 
 const double initial_saving = 2.0;
-const int period = 201;
+const int period = 21;  // 由201改成21
 
-const int nmkt = 1428;
+const int nmkt = 4;  // 由1428改为4
 const double f_w = 0.769;
 const double minw = f_w;
 const double maxw = 1.1;
 const double minr = 0.06;
 const double maxr = 0.10;
 
-const int maxit_bisec_ss_r = 50;
-const int maxit_bisec_ss_w = 50;
-const int maxit_bisec_ss_w_mid = 50;
+const int maxit_bisec_ss_r = 10;      // 修改成10
+const int maxit_bisec_ss_w = 10;      // 修改成10
+const int maxit_bisec_ss_w_mid = 10;  // 修改成10
 const double tol_w_ss = 1e-3;
 const double tol_r_ss = 1e-5;
 

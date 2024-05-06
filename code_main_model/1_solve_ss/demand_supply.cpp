@@ -3,13 +3,10 @@
 void capital_demand_supply(double*** pdf_ss, double*** gk, double*** adjust, double* gridb, double* gridtheta,
 				   double* gridb_pdf, double* gridtheta_pdf,
 					double* capital_demand, double* capital_supply, double psi,
-					double*** temp_cap_supply)
-{
-	
+					double*** temp_cap_supply) {
 	for (int i_z=0; i_z<nz; ++i_z)
 		for (int i_b=0; i_b<nb; ++i_b)
-			for (int i_theta=0; i_theta<ntheta; ++i_theta)
-			{
+			for (int i_theta=0; i_theta<ntheta; ++i_theta) {
 				if (adjust[i_z][i_b][i_theta] == 1.0 || adjust[i_z][i_b][i_theta] == 2.0)
 					temp_cap_supply[i_z][i_b][i_theta] = gridb[i_b] * (1 - gridtheta[i_theta]);
 
@@ -22,53 +19,42 @@ void capital_demand_supply(double*** pdf_ss, double*** gk, double*** adjust, dou
 
 	for (int i_z=0; i_z<nz; ++i_z)
 		for (int i_b=0; i_b<nb_pdf; ++i_b)
-			for (int i_theta=0; i_theta<ntheta_pdf; ++i_theta)
-			{
-				if (pdf_ss[i_z][i_b][i_theta]!=0.0)
-				{
+			for (int i_theta=0; i_theta<ntheta_pdf; ++i_theta) {
+				if (pdf_ss[i_z][i_b][i_theta]!=0.0) {
 					*capital_demand += lin_interpo_2(nb, ntheta, gridb, gridtheta, gk[i_z], gridb_pdf[i_b], gridtheta_pdf[i_theta]) * pdf_ss[i_z][i_b][i_theta];
 					*capital_supply += lin_interpo_2(nb, ntheta, gridb, gridtheta, temp_cap_supply[i_z], gridb_pdf[i_b], gridtheta_pdf[i_theta]) * pdf_ss[i_z][i_b][i_theta];
 				}
-
 			}
 }
 
 void labor_demand_supply(double*** pdf_ss, double*** gl, double*** adjust, double* gridb, double* gridtheta, 
-				   double* gridb_pdf, double* gridtheta_pdf,
-					double* labor_demand, double* labor_supply, 
-					double*** l)
-{
-	for (int i_z=0; i_z<nz; ++i_z)
-		for (int i_b=0; i_b<nb; ++i_b)
-			for (int i_theta=0; i_theta<ntheta; ++i_theta)
-			{
-				if (adjust[i_z][i_b][i_theta]<=2.0+1e-5)
-					l[i_z][i_b][i_theta]=1.0;
-
-				else if (adjust[i_z][i_b][i_theta]>=2.0+1e-5)
+				         double* gridb_pdf, double* gridtheta_pdf,
+					     double* labor_demand, double* labor_supply,
+					     double*** l) {
+	for (int i_z = 0; i_z < nz; ++i_z)
+		for (int i_b = 0; i_b < nb; ++i_b)
+			for (int i_theta = 0; i_theta < ntheta; ++i_theta) {
+				if (adjust[i_z][i_b][i_theta] <= 2.0 + 1e-5)
+					l[i_z][i_b][i_theta] = 1.0;
+				else if (adjust[i_z][i_b][i_theta] >= 2.0 + 1e-5)
 					l[i_z][i_b][i_theta]=0.0;
 			}
 
-	for (int i_z=0; i_z<nz; ++i_z)
-		for (int i_b=0; i_b<nb_pdf; ++i_b)
-			for (int i_theta=0; i_theta<ntheta_pdf; ++i_theta)
-			{
-				if (pdf_ss[i_z][i_b][i_theta]!=0.0)
-				{
-					*labor_demand+=lin_interpo_2(nb, ntheta, gridb, gridtheta, gl[i_z], gridb_pdf[i_b], gridtheta_pdf[i_theta])*pdf_ss[i_z][i_b][i_theta];
-					*labor_supply+=lin_interpo_2(nb, ntheta, gridb, gridtheta, l[i_z], gridb_pdf[i_b], gridtheta_pdf[i_theta])*pdf_ss[i_z][i_b][i_theta];
+	for (int i_z = 0; i_z < nz; ++i_z)
+		for (int i_b = 0; i_b < nb_pdf; ++i_b)
+			for (int i_theta = 0; i_theta < ntheta_pdf; ++i_theta) {
+				if (pdf_ss[i_z][i_b][i_theta]!=0.0) {
+					*labor_demand += lin_interpo_2(nb, ntheta, gridb, gridtheta, gl[i_z], gridb_pdf[i_b], gridtheta_pdf[i_theta])*pdf_ss[i_z][i_b][i_theta];
+					*labor_supply += lin_interpo_2(nb, ntheta, gridb, gridtheta, l[i_z], gridb_pdf[i_b], gridtheta_pdf[i_theta])*pdf_ss[i_z][i_b][i_theta];
 				}
-
 			}
-	
 }
 
 void GDP(double p,
 	double*** pdf_ss, double*** gk, double*** gl, double*** adjust, double* gridb, double* gridtheta,
 	double* gridb_pdf, double* gridtheta_pdf, double* gridz_pdf, double* probz_pdf, double** trans_z_pdf,
 	double* GDP_output, double psi,
-	double*** temp_fin)
-{
+	double*** temp_fin) {
 	double b=0.0;
 	double z=0.0;
 	double m = 0.0;
@@ -79,9 +65,8 @@ void GDP(double p,
 	double borrow=0.0;
 	for (int i_z=0; i_z<nz; ++i_z)
 		for (int i_b=0; i_b<nb; ++i_b)
-			for (int i_theta=0; i_theta<ntheta; ++i_theta)
-			{
-				if (adjust[i_z][i_b][i_theta]<=4.0+1e-5)
+			for (int i_theta = 0; i_theta < ntheta; ++i_theta) {
+				if (adjust[i_z][i_b][i_theta] <= 4.0+1e-5)
 					temp_fin[i_z][i_b][i_theta]=0.0;
 				else
 					temp_fin[i_z][i_b][i_theta]=1.0;
@@ -89,10 +74,8 @@ void GDP(double p,
 
 	for (int i_z=0; i_z<nz; ++i_z)
 		for (int i_b=0; i_b<nb_pdf; ++i_b)
-			for (int i_theta=0; i_theta<ntheta_pdf; ++i_theta)
-			{
-				if (pdf_ss[i_z][i_b][i_theta]!=0.0)
-				{
+			for (int i_theta=0; i_theta<ntheta_pdf; ++i_theta) {
+				if (pdf_ss[i_z][i_b][i_theta]!=0.0) {
 					b = gridb_pdf[i_b];
 					z = gridz_pdf[i_z];
 					m = b * gridtheta_pdf[i_theta];

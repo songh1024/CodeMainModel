@@ -61,21 +61,12 @@ int main()
 	linspace(theta_candidate, mintheta, maxtheta, coefficient);
 
 	// simulation
-    // 不申请内存，因为需要的内存空间太大
-//	int*** b_AtoB_M_index = ini_int_matrix3(nz, nb_pdf, ntheta_pdf);
-//	int*** theta_AtoB_M_index=ini_int_matrix3(nz, nb_pdf, ntheta_pdf);
-//	double***** V_AtoB=ini_matrix5(nmkt, nz, nb_pdf, ntheta_pdf, nmkt);
-//	double***** step_AtoB_prob=ini_matrix5(nmkt, nz, nb_pdf, ntheta_pdf, nmkt);
-//	int**** b_BtoA_next_index=ini_int_matrix4(nmkt, nz, nb_pdf, ntheta_pdf);
-//	int**** theta_BtoA_next_index=ini_int_matrix4(nmkt, nz, nb_pdf, ntheta_pdf);
-
-    // 只是定义变量，并没有实际申请内存，以免后面的代码出错
-    int*** b_AtoB_M_index;
-    int*** theta_AtoB_M_index;
-    double***** V_AtoB;
-    double***** step_AtoB_prob;
-    int**** b_BtoA_next_index;
-    int**** theta_BtoA_next_index;
+	int*** b_AtoB_M_index = ini_int_matrix3(nz, nb_pdf, ntheta_pdf);
+	int*** theta_AtoB_M_index=ini_int_matrix3(nz, nb_pdf, ntheta_pdf);
+	double***** V_AtoB=ini_matrix5(nmkt, nz, nb_pdf, ntheta_pdf, nmkt);
+	double***** step_AtoB_prob=ini_matrix5(nmkt, nz, nb_pdf, ntheta_pdf, nmkt);
+	int**** b_BtoA_next_index=ini_int_matrix4(nmkt, nz, nb_pdf, ntheta_pdf);
+	int**** theta_BtoA_next_index=ini_int_matrix4(nmkt, nz, nb_pdf, ntheta_pdf);
 
     double** diff = ini_matrix2(maxit_DP, nmkt);
 
@@ -140,13 +131,9 @@ int main()
 	double* gridtheta_pdf=ini_matrix1(ntheta_pdf);
 	linspace(gridtheta_pdf,mintheta,maxtheta,ntheta_pdf);
 
-    // 暂时不申请空间mig,pdf_A,pdf_B
-    double***** mig;
-    double***** pdf_A;
-    double***** pdf_B;
-//	double***** mig= ini_matrix5(period, nmkt, nz, nb_pdf, ntheta_pdf);
-//	double***** pdf_A=ini_matrix5(period, nmkt, nz, nb_pdf, ntheta_pdf);
-//	double***** pdf_B=ini_matrix5(period, nmkt, nz, nb_pdf, ntheta_pdf);
+	double***** mig= ini_matrix5(period, nmkt, nz, nb_pdf, ntheta_pdf);
+	double***** pdf_A=ini_matrix5(period, nmkt, nz, nb_pdf, ntheta_pdf);
+	double***** pdf_B=ini_matrix5(period, nmkt, nz, nb_pdf, ntheta_pdf);
 	double** sum_pdf_B=ini_matrix2(period, nmkt);
 	double** error_pdf_B=ini_matrix2(period, nmkt);
 	
@@ -282,6 +269,6 @@ int main()
 	filename=currentpath+("gl.txt");
 	write4(filename, gl, nmkt, nz, nb, ntheta);
 
-		
+
 	return 0;
 }
